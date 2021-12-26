@@ -73,6 +73,7 @@ form.addEventListener('submit', (e) => {
     
     });
 
+    //set task as completed 
     taskCheckbox.addEventListener('change', (eee) => {
         eee.preventDefault();
         
@@ -92,6 +93,9 @@ form.addEventListener('submit', (e) => {
             setIDtoTasks(completedItemItems,"compeleted");
             outputContainer.appendChild(taskCompletedItem);
 
+            //add line-through
+            taskContent.classList.add('completedItem')
+
         } else {
 
             //delete from the completed list
@@ -107,12 +111,13 @@ form.addEventListener('submit', (e) => {
             items.push(taskItem);
             outputContainer.appendChild(taskItem);
             setIDtoTasks(items,"task");
+
+            //remove line-through
+            taskContent.classList.remove('completedItem');
         }
-    })
+    });
 
-})
-
-
+});
 
 const setIDtoTasks = (array, string) => {
     let i;
