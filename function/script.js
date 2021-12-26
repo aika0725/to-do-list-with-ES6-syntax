@@ -51,74 +51,82 @@ form.addEventListener('submit', (e) => {
     inputValue.value="";
 
     //delete action
-    taskActionDelete.addEventListener('click', (ee) => {
-        ee.preventDefault();
-
-        let index = items.indexOf(taskItem);
-
-        if (index > -1){
-
-            items.splice(index,1);
-            todoContainer.removeChild(taskItem);
-            setIDtoTasks(items,"task");
-
-        } else {
-
-            let indexCompleted = completedItemItems.indexOf(taskCompletedItem);
-            console.log("not here");
-            completedItemItems.splice(indexCompleted,1);
-            completedContainer.removeChild(taskCompletedItem);
-            setIDtoTasks(completedItemItems,"compeleted");
-        }
-    
-    });
+    taskActionDelete.addEventListener('click', function(){ deletTask(taskItem, taskCompletedItem)});
 
     //set task as completed 
-    taskCheckbox.addEventListener('change', (eee) => {
-        eee.preventDefault();
-        
-        if (eee.target.checked){
-
-            //delete from to-do list
-            let index = items.indexOf(taskItem);
-            items.splice(index,1);
-            todoContainer.removeChild(taskItem);
-            setIDtoTasks(items,"task");
-
-            //add to the completed list
-            taskCompletedItem.appendChild(taskCheckbox);
-            taskCompletedItem.appendChild(taskContent);
-            taskCompletedItem.appendChild(taskActionDelete);
-            completedItemItems.push(taskCompletedItem);
-            setIDtoTasks(completedItemItems,"compeleted");
-            completedContainer.appendChild(taskCompletedItem);
-
-            //add line-through
-            taskContent.classList.add('completedItem')
-
-        } else {
-
-            //delete from the completed list
-            let index = items.indexOf(taskCompletedItem);
-            completedItemItems.splice(index,1);
-            completedContainer.removeChild(taskCompletedItem);
-            setIDtoTasks(completedItemItems,"compeleted");
-
-            //add to the to-do list
-            taskItem.appendChild(taskCheckbox);
-            taskItem.appendChild(taskContent);
-            taskItem.appendChild(taskActionDelete);
-            items.push(taskItem);
-            todoContainer.appendChild(taskItem);
-            setIDtoTasks(items,"task");
-
-            //remove line-through
-            taskContent.classList.remove('completedItem');
-        }
-    });
+    taskCheckbox.addEventListener('change', function(){completeTask(taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem)});
 
 });
 
+//delete action
+const deletTask = (taskItem,taskCompletedItem) => {
+    //ee.preventDefault();
+
+    let index = items.indexOf(taskItem);
+
+    if (index > -1){
+
+        items.splice(index,1);
+        todoContainer.removeChild(taskItem);
+        setIDtoTasks(items,"task");
+
+    } else {
+
+        let indexCompleted = completedItemItems.indexOf(taskCompletedItem);
+        console.log("not here");
+        completedItemItems.splice(indexCompleted,1);
+        completedContainer.removeChild(taskCompletedItem);
+        setIDtoTasks(completedItemItems,"compeleted");
+    }
+}
+
+//set task as completed
+
+const completeTask = (taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem) => {
+    //eee.preventDefault();
+        
+    if (taskCheckbox.checked){
+
+        //delete from to-do list
+        let index = items.indexOf(taskItem);
+        items.splice(index,1);
+        todoContainer.removeChild(taskItem);
+        setIDtoTasks(items,"task");
+
+        //add to the completed list
+        taskCompletedItem.appendChild(taskCheckbox);
+        taskCompletedItem.appendChild(taskContent);
+        taskCompletedItem.appendChild(taskActionDelete);
+        completedItemItems.push(taskCompletedItem);
+        setIDtoTasks(completedItemItems,"compeleted");
+        completedContainer.appendChild(taskCompletedItem);
+
+        //add line-through
+        taskContent.classList.add('completedItem')
+
+    } else {
+
+        //delete from the completed list
+        let index = items.indexOf(taskCompletedItem);
+        completedItemItems.splice(index,1);
+        completedContainer.removeChild(taskCompletedItem);
+        setIDtoTasks(completedItemItems,"compeleted");
+
+        //add to the to-do list
+        taskItem.appendChild(taskCheckbox);
+        taskItem.appendChild(taskContent);
+        taskItem.appendChild(taskActionDelete);
+        items.push(taskItem);
+        todoContainer.appendChild(taskItem);
+        setIDtoTasks(items,"task");
+
+        //remove line-through
+        taskContent.classList.remove('completedItem');
+    }
+}
+
+
+//assign ID;
 const setIDtoTasks = (array, string) => {
     let i;
     for (i = 0; i < array.length; i++) {
