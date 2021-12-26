@@ -2,11 +2,11 @@
 
 const form = document.querySelector('#task-form');
 const inputValue = document.querySelector('#input-content');
-const outputContainer = document.querySelector('#items');
+const todoContainer = document.querySelector('#items');
+const completedContainer = document.querySelector('#completed-items')
 
 let items = [];
 let completedItemItems = [];
-
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ form.addEventListener('submit', (e) => {
         return;
     }
 
-    //<outputContainer> -> <item> -> <checkbox><content><action>
+    //<todoContainer> -> <item> -> <checkbox><content><action>
     const taskItem = document.createElement("div");
     taskItem.classList.add("item");
 
@@ -34,7 +34,7 @@ form.addEventListener('submit', (e) => {
     taskActionDelete.classList.add("delete");
     taskActionDelete.innerHTML = "Delete";
 
-    //<outputContainer> -> <completed item> -> <checkbox><content><action>
+    //<completedContainer> -> <completed item> -> <checkbox><content><action>
     const taskCompletedItem = document.createElement("div");
     taskCompletedItem.classList.add("completed");
     
@@ -43,7 +43,7 @@ form.addEventListener('submit', (e) => {
     taskItem.appendChild(taskContent);
     taskItem.appendChild(taskActionDelete);
 
-    outputContainer.appendChild(taskItem);
+    todoContainer.appendChild(taskItem);
 
     items.push(taskItem);
     setIDtoTasks(items,"task");
@@ -59,7 +59,7 @@ form.addEventListener('submit', (e) => {
         if (index > -1){
 
             items.splice(index,1);
-            outputContainer.removeChild(taskItem);
+            todoContainer.removeChild(taskItem);
             setIDtoTasks(items,"task");
 
         } else {
@@ -67,7 +67,7 @@ form.addEventListener('submit', (e) => {
             let indexCompleted = completedItemItems.indexOf(taskCompletedItem);
             console.log("not here");
             completedItemItems.splice(indexCompleted,1);
-            outputContainer.removeChild(taskCompletedItem);
+            completedContainer.removeChild(taskCompletedItem);
             setIDtoTasks(completedItemItems,"compeleted");
         }
     
@@ -82,7 +82,7 @@ form.addEventListener('submit', (e) => {
             //delete from to-do list
             let index = items.indexOf(taskItem);
             items.splice(index,1);
-            outputContainer.removeChild(taskItem);
+            todoContainer.removeChild(taskItem);
             setIDtoTasks(items,"task");
 
             //add to the completed list
@@ -91,7 +91,7 @@ form.addEventListener('submit', (e) => {
             taskCompletedItem.appendChild(taskActionDelete);
             completedItemItems.push(taskCompletedItem);
             setIDtoTasks(completedItemItems,"compeleted");
-            outputContainer.appendChild(taskCompletedItem);
+            completedContainer.appendChild(taskCompletedItem);
 
             //add line-through
             taskContent.classList.add('completedItem')
@@ -101,7 +101,7 @@ form.addEventListener('submit', (e) => {
             //delete from the completed list
             let index = items.indexOf(taskCompletedItem);
             completedItemItems.splice(index,1);
-            outputContainer.removeChild(taskCompletedItem);
+            completedContainer.removeChild(taskCompletedItem);
             setIDtoTasks(completedItemItems,"compeleted");
 
             //add to the to-do list
@@ -109,7 +109,7 @@ form.addEventListener('submit', (e) => {
             taskItem.appendChild(taskContent);
             taskItem.appendChild(taskActionDelete);
             items.push(taskItem);
-            outputContainer.appendChild(taskItem);
+            todoContainer.appendChild(taskItem);
             setIDtoTasks(items,"task");
 
             //remove line-through
