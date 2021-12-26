@@ -1,2 +1,0 @@
-//modules
-"use strict";
