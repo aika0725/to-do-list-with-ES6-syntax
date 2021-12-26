@@ -38,7 +38,6 @@ form.addEventListener('submit', (e) => {
     const taskCompletedItem = document.createElement("div");
     taskCompletedItem.classList.add("completed");
     
-
     taskItem.appendChild(taskCheckbox);
     taskItem.appendChild(taskContent);
     taskItem.appendChild(taskActionDelete);
@@ -51,16 +50,15 @@ form.addEventListener('submit', (e) => {
     inputValue.value="";
 
     //delete action
-    taskActionDelete.addEventListener('click', function(){ deletTask(taskItem, taskCompletedItem)});
+    taskActionDelete.addEventListener('click', function(){ deletTask(taskItem, taskCompletedItem) });
 
     //set task as completed 
-    taskCheckbox.addEventListener('change', function(){completeTask(taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem)});
+    taskCheckbox.addEventListener('change', function(){ completeTask(taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem) });
 
 });
 
 //delete action
 const deletTask = (taskItem,taskCompletedItem) => {
-    //ee.preventDefault();
 
     let index = items.indexOf(taskItem);
 
@@ -83,7 +81,6 @@ const deletTask = (taskItem,taskCompletedItem) => {
 //set task as completed
 
 const completeTask = (taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem) => {
-    //eee.preventDefault();
         
     if (taskCheckbox.checked){
 
@@ -124,7 +121,6 @@ const completeTask = (taskCheckbox, taskContent, taskActionDelete, taskItem, tas
         taskContent.classList.remove('completedItem');
     }
 }
-
 
 //assign ID;
 const setIDtoTasks = (array, string) => {
