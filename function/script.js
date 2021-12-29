@@ -1,103 +1,135 @@
 //window.localStorage
 
-const form = document.querySelector('#task-form')
-const inputValue = document.querySelector('#input-content')
-const todoContainer = document.querySelector('#items')
+const form = document.querySelector('#task-form');
+const inputValue = document.querySelector('#input-content');
+const todoContainer = document.querySelector('#items');
 const completedContainer = document.querySelector('#completed-items')
 
-
-const todos = []
-const todo = {
-    id:null,
-    name:'',
-    status:false,
-    delete: function(){
-        return `<button class="delete" onClick="deleteTodo(this)">Delete</button>`
-    },
-    test: function(){
-        console.log(this)
-    }
-}
-
-
-let taskLists = new Array;
-let task = new Object;
+let items = [];
+let completedItemItems = [];
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const taskValue = inputValue.value;
-    if (!taskValue) {
+    const task = inputValue.value;
+
+    if (!task) {
         alert("please add a task");
         return;
     }
 
-    task.id;
-    task.isChecked = false;
-    task.content = taskValue;
+    //<todoContainer> -> <item> -> <checkbox><content><action>
+    const taskItem = document.createElement("div");
+    taskItem.classList.add("item");
 
-    taskLists.push(task);
-    setIDtoTasks(taskLists);
+    const taskCheckbox = document.createElement("input");
+    taskCheckbox.type = "checkbox";
+    taskCheckbox.classList.add = "checkbox";
 
-    console.log(task.id);
-    console.log(taskLists);
+    const taskContent = document.createElement("div");
+    taskContent.classList.add("content");
+    taskContent.innerHTML = task;
+
+    const taskActionDelete = document.createElement("button");
+    taskActionDelete.classList.add("delete");
+    taskActionDelete.innerHTML = "Delete";
+
+    //<completedContainer> -> <completed item> -> <checkbox><content><action>
+    const taskCompletedItem = document.createElement("div");
+    taskCompletedItem.classList.add("completed");
     
-    const item = `<div class="item">
-                    <input type="checkbox" class="checkbox"/>
-                    <div class="content">${task.content}</div>
-                    <button class="delete"">Delete</button>
-                </div>`;
+    taskItem.appendChild(taskCheckbox);
+    taskItem.appendChild(taskContent);
+    taskItem.appendChild(taskActionDelete);
 
-    const completedItem = `<div class="completed">
-                    <input type="checkbox" class="checkbox" checked/>
-                    <div class="content completed">${task.content}</div>
-                    <button class="delete" onClick="">Delete</button>
-                </div>`;
+    todoContainer.appendChild(taskItem);
 
-    todoContainer.innerHTML+=item;
-
-    //add eventlistener 
-    ifCheck(task.isChecked);
-    deleteTask();
-
+    items.push(taskItem);
+    setIDtoTasks(items,"task");
 
     inputValue.value="";
+
+    //delete action
+    taskActionDelete.addEventListener('click', function(){ deletTask(taskItem, taskCompletedItem) });
+
+    //set task as completed 
+    taskCheckbox.addEventListener('change', function(){ completeTask(taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem) });
+
 });
-const test= ()=>{
-    console.log("hi");
-}
-//console.log(task.isChecked);
-const ifCheck = (isChecked) => {
-    let checkboxes = document.getElementsByClassName('checkbox');
-    for (let i = 0; i< checkboxes.length;i++){
-        checkboxes[i].addEventListener('change', (eee) => {
-            eee.preventDefault();
-            if (isChecked){
-                isChecked = false;
-            } else {
-                isChecked = true;
-            }
-        })
+
+//delete action
+const deletTask = (taskItem,taskCompletedItem) => {
+
+    let index = items.indexOf(taskItem);
+
+    if (index > -1){
+
+        items.splice(index,1);
+        todoContainer.removeChild(taskItem);
+        setIDtoTasks(items,"task");
+
+    } else {
+
+        let indexCompleted = completedItemItems.indexOf(taskCompletedItem);
+        console.log("not here");
+        completedItemItems.splice(indexCompleted,1);
+        completedContainer.removeChild(taskCompletedItem);
+        setIDtoTasks(completedItemItems,"compeleted");
     }
-    return isChecked;
 }
 
-const deleteTask = () =>{
-   
-    let delBtns = document.getElementsByClassName('delete');
+//set task as completed
 
-    for (let i = 0; i< delBtns.length;i++) {
-        delBtns[i].addEventListener('click',(ee) =>{
-            ee.preventDefault();
-            ee.target.closest('.item').remove();
-        })
+const completeTask = (taskCheckbox, taskContent, taskActionDelete, taskItem, taskCompletedItem) => {
+        
+    if (taskCheckbox.checked){
+
+        //delete from to-do list
+        let index = items.indexOf(taskItem);
+        items.splice(index,1);
+        todoContainer.removeChild(taskItem);
+        setIDtoTasks(items,"task");
+
+        //add to the completed list
+        taskCompletedItem.appendChild(taskCheckbox);
+        taskCompletedItem.appendChild(taskContent);
+        taskCompletedItem.appendChild(taskActionDelete);
+        completedItemItems.push(taskCompletedItem);
+        setIDtoTasks(completedItemItems,"compeleted");
+        completedContainer.appendChild(taskCompletedItem);
+
+        //add line-through
+        taskContent.classList.add('completedItem')
+
+    } else {
+
+        //delete from the completed list
+        let index = items.indexOf(taskCompletedItem);
+        completedItemItems.splice(index,1);
+        completedContainer.removeChild(taskCompletedItem);
+        setIDtoTasks(completedItemItems,"compeleted");
+
+        //add to the to-do list
+        taskItem.appendChild(taskCheckbox);
+        taskItem.appendChild(taskContent);
+        taskItem.appendChild(taskActionDelete);
+        items.push(taskItem);
+        todoContainer.appendChild(taskItem);
+        setIDtoTasks(items,"task");
+
+        //remove line-through
+        taskContent.classList.remove('completedItem');
     }
 }
 
 //assign ID;
-const setIDtoTasks = (array) => {
+const setIDtoTasks = (array, string) => {
     let i;
     for (i = 0; i < array.length; i++) {
-        array[i].id = i;
+        array[i].id = string + i;
     }
+    return i + 1;
 }
+
+//setIDtoTasks(items,"task");
+//setIDtoTasks(completedItemItems,"completedTask");
