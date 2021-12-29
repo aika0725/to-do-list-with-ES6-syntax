@@ -20,6 +20,7 @@ const addDeleteEvents = function () {
         if (todoContainer.contains(this) == false){
             completedTodos.splice(i,1)
         } else {
+            //todos.splice(i,1)
             todos.splice(i,1)
         }
         i++
@@ -53,9 +54,9 @@ const updateList = function(){
     todos.forEach( () => {
         let i = 0
         const todoContent =`<div class="item">
-        <input type="checkbox" class="checkbox"/>
+        <input type="checkbox" class="checkbox ${todos[i].id}"/>
         <div class="content">${todos[i].name}</div>
-        <button class="delete">Delete</button>
+        <button class="delete ${todos[i].id}">Delete</button>
         </div>`
         todoContainer.innerHTML += todoContent
         i++
@@ -64,9 +65,9 @@ const updateList = function(){
     completedTodos.forEach ( () => {
         let i = 0
         const todoContentCompleted =`<div class="item">
-        <input type="checkbox" class="checkbox" />
+        <input type="checkbox" class="checkbox ${completedTodos[i].id}" />
         <div class="content completed">${completedTodos[i].name}</div>
-        <button class="delete">Delete</button>
+        <button class="delete"  ${completedTodos[i].id}>Delete</button>
         </div>`
         completedContainer.innerHTML+=todoContentCompleted
         i++
