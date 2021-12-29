@@ -45,7 +45,7 @@ const addCompletedEvents = function () {
         })
     }
 }
-
+let a =0
 const updateList = function(){
     todoContainer.innerHTML = ''
     completedContainer.innerHTML = ''
