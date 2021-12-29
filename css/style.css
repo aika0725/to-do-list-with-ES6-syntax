@@ -40,7 +40,7 @@
 
 }
 
-.item, .deleted, .completed {
+.item, .deleted{
     display: flex;
     margin-top: 1em;
     margin-bottom: 0.5em;
@@ -80,7 +80,7 @@
     margin-right: 0.5em;
 }
 
-.completedItem {
+.completed {
     text-decoration: line-through;
 }
 
