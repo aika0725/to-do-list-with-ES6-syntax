@@ -49,16 +49,12 @@
 
 }
 
-.content{
+.checkbox {
     flex: 1 1 0%;
     vertical-align: middle;
 }
 
-.checkbox {
-    vertical-align: middle;
-}
-
-.delete {
+.delBtn {
     vertical-align: middle;
 }
 

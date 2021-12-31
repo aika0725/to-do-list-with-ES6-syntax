@@ -1,95 +1,74 @@
 const form = document.querySelector('#task-form')
-const inputValue = document.querySelector('#input-content')
-const todoContainer = document.querySelector('#items')
+const todoContainer = document.querySelector('#todo-items')
 const completedContainer = document.querySelector('#completed-items')
 
-
 let todos = []
-let completedTodos = []
-const todo = {
-    id: Math.floor(Math.random() * 10000),
-    name:'',
-}
 
-const addDeleteEvents = function () {
-    const deleteBtns = document.querySelectorAll('.delete')
-    const deleteBtnsArr = Array.from(deleteBtns)
-
-    deleteBtnsArr.forEach(btns => btns.addEventListener('click', function (){
-        let i = 0
-        if (todoContainer.contains(this) == false){
-            completedTodos.splice(i,1)
-        } else {
-            //todos.splice(i,1)
-            todos.splice(i,1)
+const printList = (list)=>{
+    list.forEach((todo)=>{
+        const listContent = `<div class="item" id="${todo.id}">
+        <label class="checkbox"><input type="checkbox">${todo.text}</label>
+        <button class="delBtn">Delete</button>
+        </div>`
+        if (!todo.isCompleted){
+            todoContainer.innerHTML += listContent
+        }else{
+            const listContent = `<div class="item" id="${todo.id}">
+            <label class="checkbox completed"><input type="checkbox" class="checkbox" checked>${todo.text}</label>
+            <button class="delBtn">Delete</button>
+            </div>`
+            completedContainer.innerHTML += listContent
         }
-        i++
-        updateList()
-        
-    }))
-
+    })
 }
 
-const addCompletedEvents = function () {
-    const checkboxs = document.querySelectorAll('.checkbox')
-    for (let i =0; i < checkboxs.length; i++){
-        checkboxs[i].addEventListener('change', function (){
-
-            if (todoContainer.contains(this) == false){//completed
-                todos.push(completedTodos.splice(i,1)[0])
-                
-            } else {
-                completedTodos.push(todos.splice(i,1)[0])
-                console.log(completedTodos)
-            }
-            updateList()
-        })
-    }
-}
-
-const updateList = function(){
+const renderList = () => {
     todoContainer.innerHTML = ''
-    completedContainer.innerHTML = ''
+    completedContainer.innerHTML=''
+    printList(todos)
+    removeToto()
+    completedTodo()
+}
 
-    todos.forEach( () => {
-        let i = 0
-        const todoContent =`<div class="item">
-        <input type="checkbox" class="checkbox ${todos[i].id}"/>
-        <div class="content">${todos[i].name}</div>
-        <button class="delete ${todos[i].id}">Delete</button>
-        </div>`
-        todoContainer.innerHTML += todoContent
-        i++
+const removeToto = ()=>{
+    const btns = document.querySelectorAll('.delBtn')
+    btns.forEach((btn)=>{
+        btn.addEventListener('click', (e)=>{
+            const id = e.target.closest('.item').getAttribute('id')
+            const selectedIndex = todos.findIndex((todo)=>{
+                return todo.id == id
+            })
+            todos.splice(selectedIndex,1)
+            renderList()
+        })
     })
+}
 
-    completedTodos.forEach ( () => {
-        let i = 0
-        const todoContentCompleted =`<div class="item">
-        <input type="checkbox" class="checkbox ${completedTodos[i].id}" />
-        <div class="content completed">${completedTodos[i].name}</div>
-        <button class="delete"  ${completedTodos[i].id}>Delete</button>
-        </div>`
-        completedContainer.innerHTML+=todoContentCompleted
-        i++
+const completedTodo = () =>{
+    const checkboxes = document.querySelectorAll('.checkbox')
+    checkboxes.forEach((box)=>{
+        box.addEventListener('change', (e)=>{
+            const id = e.target.closest('.item').getAttribute('id')
+            const selectedIndex = todos.findIndex((todo)=>{
+                return todo.id == id
+            })
+            todos[selectedIndex].isCompleted = e.target.checked
+            renderList()
+        })
     })
-    addDeleteEvents()
-    addCompletedEvents()
 }
 
 form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const taskValue = inputValue.value.trim();
-    if (!taskValue) {
-        alert("please add a task");
-        return;
+    e.preventDefault()
+    const todo = {
+        id: Math.floor(Math.random() * 10000),
+        text:'',
+        isCompleted: false
     }
-    todo.name = taskValue
-    let todoItem = todo
-    todos.push(todoItem)
-    updateList()
+    
+    todo.text = e.target.elements.inputValue.value
+    todos.push(todo)
+    renderList()
 
-    console.log(todo)
-
-    inputValue.value = ''
+    e.target.elements.inputValue.value=''
 })
