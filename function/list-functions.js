@@ -1,11 +1,11 @@
 // Save todo to localstorage
-const saveTodo = () =>{
+const saveTodo = () => {
     const todosJSON = JSON.stringify(todos)
     localStorage.setItem('todoList', todosJSON)
 }
 
 // Get todos from localstorage
-const getSavedTodos = function () {
+const getSavedTodos = () => {
     const todosJSON = localStorage.getItem('todoList')
 
     if (todosJSON !== null) {
@@ -16,34 +16,31 @@ const getSavedTodos = function () {
 }
 
 // Create and print the todo list
-const printList = (list)=>{
-    list.forEach((todo)=>{
+const printList = (list) => {
+    list.forEach((todo) => {
         const listContent = `<div class="form-check item" id="${todo.id}">
-        <label class="form-check-label checkbox"><input class="form-check-input" type="checkbox">${todo.text}</label>
+        <label class="${!todo.isCompleted ? "form-check-label" : "completed"} checkbox" >
+        <input class="form-check-input" type="checkbox" ${todo.isCompleted && 'checked'}>${todo.text}</label>
         <button class="btn btn-outline-light btn-sm delBtn right1">❌</button>
         </div>`
-        if (!todo.isCompleted){
+        if (!todo.isCompleted) {
             todoContainer.innerHTML += listContent
-        }else{
-            const listContent = `<div class="form-check item" id="${todo.id}">
-            <label class="checkbox completed"><input class="form-check-input" type="checkbox" class="checkbox" checked>${todo.text}</label>
-            <button class="btn btn-outline-light btn-sm delBtn">❌</button>
-            </div>`
+        } else {
             completedContainer.innerHTML += listContent
         }
     })
 }
 
 // Remove todo
-const removeToto = ()=>{
+const removeToto = () => {
     const btns = document.querySelectorAll('.delBtn')
-    btns.forEach((btn)=>{
-        btn.addEventListener('click', (e)=>{
+    btns.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
             const id = e.target.closest('.item').getAttribute('id')
-            const selectedIndex = todos.findIndex((todo)=>{
+            const selectedIndex = todos.findIndex((todo) => {
                 return todo.id == id
             })
-            todos.splice(selectedIndex,1)
+            todos.splice(selectedIndex, 1)
             saveTodo()
             renderList()
         })
@@ -51,12 +48,12 @@ const removeToto = ()=>{
 }
 
 // Set completed status for todo 
-const completedTodo = () =>{
+const completedTodo = () => {
     const checkboxes = document.querySelectorAll('.checkbox')
-    checkboxes.forEach((box)=>{
-        box.addEventListener('change', (e)=>{
+    checkboxes.forEach((box) => {
+        box.addEventListener('change', (e) => {
             const id = e.target.closest('.item').getAttribute('id')
-            const selectedIndex = todos.findIndex((todo)=>{
+            const selectedIndex = todos.findIndex((todo) => {
                 return todo.id == id
             })
             todos[selectedIndex].isCompleted = e.target.checked
@@ -69,7 +66,7 @@ const completedTodo = () =>{
 // Render the todo list 
 const renderList = () => {
     todoContainer.innerHTML = ''
-    completedContainer.innerHTML=''
+    completedContainer.innerHTML = ''
     printList(todos)
     removeToto()
     completedTodo()

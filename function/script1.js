@@ -5,7 +5,7 @@ form.addEventListener('submit', (e) => {
     e.preventDefault()
     const todo = {
         id: Math.floor(Math.random() * 10000),
-        text:'',
+        text: '',
         isCompleted: false,
         category: 'none'
     }
@@ -19,6 +19,6 @@ form.addEventListener('submit', (e) => {
     renderList()
     saveTodo()
 
-    e.target.elements.inputValue.value=''
+    e.target.elements.inputValue.value = ''
 })
 
